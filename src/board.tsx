@@ -6,6 +6,7 @@ interface BoardProps {
 
 interface BoardState {
     squares: JSX.Element[][],
+    clickedPiece: boolean,
 }
 
 export class Board extends React.Component<BoardProps, BoardState> {
@@ -39,11 +40,26 @@ export class Board extends React.Component<BoardProps, BoardState> {
         
         this.state = {
             squares: rows,
+            clickedPiece: false,
         }
     }
 
+    renderBoard() {
+        // TODO
+    }
+
     renderSquare(row: number, col: number, pieceImg: string, pieceName: string) {
-        return <Square row={row} col={col} pieceImg={pieceImg} pieceName={pieceName}/>;
+        return <Square 
+                row={row}
+                col={col}
+                pieceImg={pieceImg}
+                pieceName={pieceName}
+                onClick={() => this.onClick(row, col)}
+                />;
+    }
+
+    onClick(row: number, col: number) {
+        console.log({row, col})
     }
 
     render() {
