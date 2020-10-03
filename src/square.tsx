@@ -1,39 +1,24 @@
 import React from 'react'
 
 interface SquareProps {
-    row: number;
-    col: number;
-    pieceImg: string;
-    pieceName: string;
+    color: string;
+    piece?: JSX.Element;
     onClick: () => void;
 }
 
 interface SquareState {
-    row: number,
-    col: number,
     color: string;
-    pieceImg: string;
-    pieceName: string;
+    piece?: JSX.Element;
     onClick: () => void;
 }
 
 export class Square extends React.Component<SquareProps, SquareState> {
     constructor(props: SquareProps) {
         super(props);
-        const color = props.row % 2 && props.col % 2
-            ? "square-white"
-            : props.row % 2
-            ? "square-green"
-            : props.col % 2
-            ? "square-green"
-            : "square-white";
         
         this.state = {
-            row: props.row,
-            col: props.col,
-            color: color,
-            pieceImg: props.pieceImg,
-            pieceName: props.pieceName,
+            color: props.color,
+            piece: props.piece,
             onClick: props.onClick,
         };
     }
@@ -41,7 +26,7 @@ export class Square extends React.Component<SquareProps, SquareState> {
     render() {
         return (
             <button className={this.state.color} onClick={this.state.onClick}>
-                <img src={this.state.pieceImg} alt={this.state.pieceName} />
+                {this.state.piece}
             </button>
         );
     }

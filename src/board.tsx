@@ -1,5 +1,6 @@
 import React from 'react'
 import { Square } from './square'
+import { Piece } from './piece'
 
 interface BoardProps {
 }
@@ -13,49 +14,84 @@ export class Board extends React.Component<BoardProps, BoardState> {
     constructor(props: BoardProps) {
         super(props);
 
-        const r = Array.from(Array(8).keys());
-        const c = Array.from(Array(8).keys());
-        let rows: JSX.Element[][] = [];
-        r.map((row) => {
+        const pieces = {
+            br: Array(2).fill(<Piece pieceImg={require('./img/br.png')} pieceName={'rook'} />),
+            bn: Array(2).fill(<Piece pieceImg={require('./img/bn.png')} pieceName={'knight'} />),
+            bb: Array(2).fill(<Piece pieceImg={require('./img/bb.png')} pieceName={'bishop'} />),
+            bq: <Piece pieceImg={require('./img/bq.png')} pieceName={'queen'} />,
+            bk: <Piece pieceImg={require('./img/bk.png')} pieceName={'king'} />,
+            bp: Array(8).fill(<Piece pieceImg={require('./img/bp.png')} pieceName={'pawn'} />),
+            wr: Array(2).fill(<Piece pieceImg={require('./img/wr.png')} pieceName={'rook'} />),
+            wn: Array(2).fill(<Piece pieceImg={require('./img/wn.png')} pieceName={'knight'} />),
+            wb: Array(2).fill(<Piece pieceImg={require('./img/wb.png')} pieceName={'bishop'} />),
+            wq: <Piece pieceImg={require('./img/wq.png')} pieceName={'queen'} />,
+            wk: <Piece pieceImg={require('./img/wk.png')} pieceName={'king'} />,
+            wp: Array(8).fill(<Piece pieceImg={require('./img/wp.png')} pieceName={'pawn'} />),
+        }
+        let squares: JSX.Element[][] = [];
+        Array.from(Array(8).keys()).map((row) => {
             let cols: JSX.Element[] = [];
-            c.map((col) => {
-                let pieceImg = '';
-                let pieceName = '';
-                if (row === 0 && (col === 0 || col === 7)) { pieceImg=require('./img/br.png'); pieceName='br'; }
-                if (row === 0 && (col === 1 || col === 6)) { pieceImg=require('./img/bn.png'); pieceName='bn'; }
-                if (row === 0 && (col === 2 || col === 5)) { pieceImg=require('./img/bb.png'); pieceName='bb'; }
-                if (row === 0 && col === 3) { pieceImg=require('./img/bq.png'); pieceName='bq'; }
-                if (row === 0 && col === 4) { pieceImg=require('./img/bk.png'); pieceName='bk'; }
-                if (row === 1) { pieceImg=require('./img/bp.png'); pieceName='bp'; }
-                if (row === 7 && (col === 0 || col === 7)) { pieceImg=require('./img/wr.png'); pieceName='wr'; }
-                if (row === 7 && (col === 1 || col === 6)) { pieceImg=require('./img/wn.png'); pieceName='wn'; }
-                if (row === 7 && (col === 2 || col === 5)) { pieceImg=require('./img/wb.png'); pieceName='wb'; }
-                if (row === 7 && col === 3) { pieceImg=require('./img/wq.png'); pieceName='wq'; }
-                if (row === 7 && col === 4) { pieceImg=require('./img/wk.png'); pieceName='wk'; }
-                if (row === 6) { pieceImg=require('./img/wp.png'); pieceName='wp'; }
-                return cols.push(this.renderSquare(row, col, pieceImg, pieceName))
+            Array.from(Array(8).keys()).map((col) => {
+                const color = row % 2 === col % 2 ? "square-white" : "square-green";
+                switch (row) {
+                    case 0:
+                        switch (col) {
+                            case 0:
+                                return cols.push(<Square color={color} piece={pieces.br[0]} onClick={() => {}}/>);
+                            case 1:
+                                return cols.push(<Square color={color} piece={pieces.bn[0]} onClick={() => {}}/>);
+                            case 2:
+                                return cols.push(<Square color={color} piece={pieces.bb[0]} onClick={() => {}}/>);
+                            case 3:
+                                return cols.push(<Square color={color} piece={pieces.bq} onClick={() => {}}/>);
+                            case 4:
+                                return cols.push(<Square color={color} piece={pieces.bk} onClick={() => {}}/>);
+                            case 5:
+                                return cols.push(<Square color={color} piece={pieces.bb[1]} onClick={() => {}}/>);
+                            case 6:
+                                return cols.push(<Square color={color} piece={pieces.bn[1]} onClick={() => {}}/>);
+                            case 7:
+                                return cols.push(<Square color={color} piece={pieces.br[1]} onClick={() => {}}/>);
+                            default:
+                                return cols.push(<Square color={color} onClick={() => {}}/>);
+                        }
+                    case 1:
+                        return cols.push(<Square color={color} piece={pieces.bp[col]} onClick={() => {}}/>);
+                    case 6:
+                        return cols.push(<Square color={color} piece={pieces.wp[col]} onClick={() => {}}/>);
+                    case 7:
+                        switch (col) {
+                            case 0:
+                                return cols.push(<Square color={color} piece={pieces.wr[0]} onClick={() => {}}/>);
+                            case 1:
+                                return cols.push(<Square color={color} piece={pieces.wn[0]} onClick={() => {}}/>);
+                            case 2:
+                                return cols.push(<Square color={color} piece={pieces.wb[0]} onClick={() => {}}/>);
+                            case 3:
+                                return cols.push(<Square color={color} piece={pieces.wq} onClick={() => {}}/>);
+                            case 4:
+                                return cols.push(<Square color={color} piece={pieces.wk} onClick={() => {}}/>);
+                            case 5:
+                                return cols.push(<Square color={color} piece={pieces.wb[1]} onClick={() => {}}/>);
+                            case 6:
+                                return cols.push(<Square color={color} piece={pieces.wn[1]} onClick={() => {}}/>);
+                            case 7:
+                                return cols.push(<Square color={color} piece={pieces.wr[1]} onClick={() => {}}/>);
+                            default:
+                                return cols.push(<Square color={color} onClick={() => {}}/>);
+                        }
+                    default:
+                        return cols.push(<Square color={color} onClick={() => {}}/>);
+                    
+                }
             })
-            return rows.push(cols)
+            return squares.push(cols);
         })
         
         this.state = {
-            squares: rows,
+            squares: squares,
             clickedPiece: false,
         }
-    }
-
-    renderBoard() {
-        // TODO
-    }
-
-    renderSquare(row: number, col: number, pieceImg: string, pieceName: string) {
-        return <Square 
-                row={row}
-                col={col}
-                pieceImg={pieceImg}
-                pieceName={pieceName}
-                onClick={() => this.onClick(row, col)}
-                />;
     }
 
     onClick(row: number, col: number) {
